@@ -29,7 +29,7 @@ public partial class TextureRect : Godot.TextureRect{
                 string[] files = Directory.GetFiles(ProjectSettings.GlobalizePath("res://img/"), "*.png");
                 LoadImageAsTexture(files[0]);
                 //loadB();
-                SetGrid();
+                //SetGrid();
             }
     }
 
@@ -57,8 +57,8 @@ public partial class TextureRect : Godot.TextureRect{
         Vector2 currentScale = Scale;
         //currentScale.X = 1.0f/ scale;
         //currentScale.Y = 1.0f/ scale;
-        currentScale.X = 1.0f * (((rectSize.X + 1) * scale) / (float)((rectSize.X * scale) + 1));
-        currentScale.Y = 1.0f * (((rectSize.X + 1) * scale) / (float)((rectSize.Y * scale) + 1));
+        currentScale.X = 1.0f / scale;// * (((rectSize.X + 1) * scale) / (float)((rectSize.X * scale) + 1));
+        currentScale.Y = 1.0f / scale;// * (((rectSize.X + 1) * scale) / (float)((rectSize.Y * scale) + 1));
         childGridMode.Scale = currentScale;
         ImageTexture texture = new ImageTexture();
         Godot.Image image = Godot.Image.Create(1+(int)(rectSize.X* scale), 1+(int)(rectSize.Y* scale), false, Godot.Image.Format.Rgba8);
@@ -81,7 +81,30 @@ public partial class TextureRect : Godot.TextureRect{
 
         Texture = icon;
         TextureFilter = TextureFilterEnum.Nearest;
+        Size = icon.GetSize();
+        /*float newScale = (400f / Size.X);
+        if(newScale>256)
+            newScale = 256;
+        else if (newScale > 128)
+            newScale = 128;
+        else if (newScale > 64)
+            newScale = 64;
+        else if (newScale > 32)
+            newScale = 32;
+        else if (newScale > 16)
+            newScale = 16;
+        else if (newScale > 8)
+            newScale = 8;
+        else if (newScale > 4)
+            newScale = 4;
+        else if (newScale > 2)
+            newScale = 2;
+        else newScale = 1;*/
+        int newScale = 8;
+        Scale = new Vector2(newScale, newScale);
 
+        //Vector2 voxelSize = VoxelClass.GetSize();
+        //Position = (Size - voxelSize) / 2;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -99,6 +122,12 @@ public partial class TextureRect : Godot.TextureRect{
                 if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Left)
                 {
                     GD.Print("Left mouse button pressed");
+                    VoxelClass.Pressed(0, Position, Scale, Size, GetViewport().GetMousePosition());
+                    MyTextureRectVox voxNode = (MyTextureRectVox)GetNode("./MyTextureRectVox");
+                    voxNode.DrawVoxel();
+                    
+                    MyTextureRectVox voxNode2 = (MyTextureRectVox)GetNode("../../../../Window2/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox");
+                    voxNode2.DrawVoxel();
                 }
                 else if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Right)
                 {
@@ -109,9 +138,9 @@ public partial class TextureRect : Godot.TextureRect{
                     float scaleMultiplier = 1.25992104989f;
                     Vector2 mousePosition = GetViewport().GetMousePosition();
 
-                    Vector2 imageStart = this.Position;
-                    Vector2 currentScale = this.Scale;
-                    Vector2 currentSize = this.Size;
+                    Vector2 imageStart = Position;
+                    Vector2 currentScale = Scale;
+                    //Vector2 currentSize = this.Size;
 
                     Vector2 newScale = currentScale * scaleMultiplier;
                     float dx = (mousePosition.X - imageStart.X) / currentScale.X;
@@ -132,7 +161,7 @@ public partial class TextureRect : Godot.TextureRect{
                     
                     Vector2 imageStart = this.Position;
                     Vector2 currentScale = this.Scale;
-                    Vector2 currentSize = this.Size;
+                    //Vector2 currentSize = this.Size;
 
                     Vector2 newScale = currentScale * scaleMultiplier;
                     float dx = (mousePosition.X - imageStart.X) / currentScale.X;
@@ -177,5 +206,22 @@ public partial class TextureRect : Godot.TextureRect{
                 }
             }
         }
+    }
+
+    internal void UpdatePos()
+    {
+        Vector2 voxelSize = VoxelClass.GetSize();
+        Position = -(Size - voxelSize) / 2;
+        MyTextureRectVox myTextureRectVox = (MyTextureRectVox)GetNode("./MyTextureRectVox");
+        //Window/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox
+        //Window/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox
+        myTextureRectVox.Position = new Vector2(-Position.X + 0.1f, -Position.Y + 0.1f);
+    }
+
+    public void _on_option_button_item_selected2(long index)
+    {
+        string[] files = Directory.GetFiles(ProjectSettings.GlobalizePath("res://img/"), "*.png");
+        LoadImageAsTexture(files[index]);
+        UpdatePos();
     }
 }

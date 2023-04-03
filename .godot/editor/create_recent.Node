@@ -1,4 +1,15 @@
+OptionButton
+ColorRect
 TextEdit
-Node2D
+Camera3D
+CSGBox3D
+OmniLight3D
+Node3D
+VSlider
+HSlider
 TextureRect
-Sprite2D
+SubViewport
+SubViewportContainer
+Window
+GridContainer
+GridMap
