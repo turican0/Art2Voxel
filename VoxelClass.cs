@@ -176,12 +176,27 @@ namespace Art2Voxel
             GD.Print("Pressed pixel:" + pressedPixel);
             int x = (int)pressedPixel2.X;
             int z = (int)pressedPixel2.Y;
-            //for (int x = 0; x != maxXY; x += 1)
-                for (int y = 0; y != maxXY; y += 1)
-                    //for (int z = 0; z < maxZ; z++)
-                    {
-                        voxArray[z, y, x] = new Color(1,0,1,1);
-                    }                
+
+            int lastVoxel = -1;
+            for (int y = 0; y != maxXY; y += 1)
+            {
+                if (voxArray[z, y, x].A == 0)
+                {
+                    lastVoxel = y;
+                    break;
+                }
+            }
+
+            lastVoxel--;
+            if(lastVoxel>=0)
+                voxArray[z, lastVoxel, x] = voxArray[z, lastVoxel + 1, x];
+            /*
+        //for (int x = 0; x != maxXY; x += 1)
+        for (int y = 0; y != maxXY; y += 1)
+                //for (int z = 0; z < maxZ; z++)
+                {
+                    voxArray[z, y, x] = new Color(1,0,1,1);
+                }*/
         }
         /*
 .(0st)
