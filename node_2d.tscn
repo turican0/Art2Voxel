@@ -104,7 +104,7 @@ color = Color(0, 1, 0, 1)
 texture_filter = 1
 offset_right = 79.0
 offset_bottom = 65.0
-scale = Vector2(4, 4)
+scale = Vector2(8, 8)
 texture = ExtResource("6_2nbc0")
 script = ExtResource("2_ulp3s")
 
@@ -253,7 +253,7 @@ color = Color(0, 1, 0, 1)
 texture_filter = 1
 offset_right = 79.0
 offset_bottom = 65.0
-scale = Vector2(4, 4)
+scale = Vector2(8, 8)
 texture = ExtResource("6_2nbc0")
 script = ExtResource("2_ulp3s")
 

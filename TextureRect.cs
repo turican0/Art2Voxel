@@ -121,7 +121,7 @@ public partial class TextureRect : Godot.TextureRect{
             {
                 if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Left)
                 {
-                    GD.Print("Left mouse button pressed");
+                    //GD.Print("Left mouse button pressed");
                     VoxelClass.Pressed(0, Position, Scale, Size, GetViewport().GetMousePosition());
                     MyTextureRectVox voxNode = (MyTextureRectVox)GetNode("./MyTextureRectVox");
                     voxNode.DrawVoxel();
@@ -131,7 +131,13 @@ public partial class TextureRect : Godot.TextureRect{
                 }
                 else if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Right)
                 {
-                    GD.Print("Right mouse button pressed");
+                    //GD.Print("Right mouse button pressed");
+                    VoxelClass.Pressed(1, Position, Scale, Size, GetViewport().GetMousePosition());
+                    MyTextureRectVox voxNode = (MyTextureRectVox)GetNode("./MyTextureRectVox");
+                    voxNode.DrawVoxel();
+
+                    MyTextureRectVox voxNode2 = (MyTextureRectVox)GetNode("../../../../Window2/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox");
+                    voxNode2.DrawVoxel();
                 }
                 else if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.WheelUp)
                 {

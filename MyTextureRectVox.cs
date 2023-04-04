@@ -101,7 +101,7 @@ public partial class MyTextureRectVox : TextureRect
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		StartRun();		
+		StartRun();
 	}
 	
 	private void _on_option_button_item_selected(long index)
@@ -109,7 +109,6 @@ public partial class MyTextureRectVox : TextureRect
 		DrawVoxel(-(index*22.5f));
         TextureRect parentNode = (TextureRect)GetNode("../../MyTextureRect");
 		parentNode._on_option_button_item_selected2(index);
-
     }
 
     internal void DrawVoxel()

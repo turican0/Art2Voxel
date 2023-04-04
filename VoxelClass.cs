@@ -180,16 +180,30 @@ namespace Art2Voxel
             int lastVoxel = -1;
             for (int y = 0; y != maxXY; y += 1)
             {
-                if (voxArray[z, y, x].A == 0)
+                if (voxArray[z, y, x].A == 1)
                 {
                     lastVoxel = y;
                     break;
                 }
             }
-
-            lastVoxel--;
-            if(lastVoxel>=0)
-                voxArray[z, lastVoxel, x] = voxArray[z, lastVoxel + 1, x];
+            if (pressed == 0)
+            {
+                lastVoxel--;
+                if (lastVoxel >= 0)
+                    voxArray[z, lastVoxel, x] = voxArray[z, lastVoxel + 1, x];
+            }
+            else
+            {
+                if (lastVoxel >= 0)
+                {
+                    if (lastVoxel +1 < maxXY)
+                    {
+                        if (voxArray[z, lastVoxel + 1, x].A == 0)
+                            voxArray[z, lastVoxel + 1, x] = voxArray[z, lastVoxel, x];
+                    }
+                    voxArray[z, lastVoxel, x] = new Godot.Color(0, 0, 0, 0);
+                }
+            }
             /*
         //for (int x = 0; x != maxXY; x += 1)
         for (int y = 0; y != maxXY; y += 1)
