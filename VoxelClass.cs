@@ -169,10 +169,10 @@ namespace Art2Voxel
 
         internal static void Pressed(int pressed, Vector2 position, Vector2 scale, Vector2 size, Vector2 mouse)
         {
-            Vector2 pressedPixel = (mouse - position) / scale;
+            Vector2 pressedPixel = ((mouse - position) / scale) / 3f;
             Vector2 pressedPixel2;
-            pressedPixel2.X = pressedPixel.X + (int)((maxXY - size.X)/2);
-            pressedPixel2.Y = pressedPixel.Y + (int)((maxZ - size.Y)/ 2);
+            pressedPixel2.X = pressedPixel.X;// + (int)((maxXY - size.X)/2);
+            pressedPixel2.Y = pressedPixel.Y;// + (int)((maxZ - size.Y)/ 2);
             GD.Print("Pressed pixel:" + pressedPixel);
             int x = (int)pressedPixel2.X;
             int z = (int)pressedPixel2.Y;

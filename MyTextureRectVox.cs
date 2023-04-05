@@ -45,16 +45,24 @@ public partial class MyTextureRectVox : TextureRect
         childGridMode.Scale = currentScale;
         ImageTexture texture = new ImageTexture();
         Godot.Image image = Godot.Image.Create(1 + (int)(rectSize.X/3 * scale), 1 + (int)(rectSize.Y/3 * scale), false, Godot.Image.Format.Rgba8);
-        var color = new Godot.Color(255, 255, 255, 255);
+        //var color = new Godot.Color(1, 1, 1, 1);
+        
+        //debug
+        //for (int y = 0; y < 1 + rectSize.Y / 3 * scale; y++)
+        //    for (int x = 0; x < 1 + rectSize.X / 3 * scale; x ++)
+        //        image.SetPixel(x, y, new Godot.Color(0, 0, 0, 1));
+        //debug
+
         for (int y = 0; y < 1 + rectSize.Y/3 * scale; y++)
             for (int x = 0; x < 1 + rectSize.X/3 * scale; x += scale)
-                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 255));
+                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 1));
         for (int y = 0; y < 1 + rectSize.Y/3 * scale; y += scale)
             for (int x = 0; x < 1 + rectSize.X/3 * scale; x++)
-                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 255));
+                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 1));
         texture = ImageTexture.CreateFromImage(image);
         childGridMode.Texture = texture;
         childGridMode.TextureFilter = TextureFilterEnum.Nearest;
+        //childGridMode.ZIndex = 0;
         AddChild(childGridMode);
     }
 
@@ -62,16 +70,44 @@ public partial class MyTextureRectVox : TextureRect
 	{
 		ImageTexture texture = new ImageTexture();
 		Godot.Image image = Godot.Image.Create(VoxelClass.maxXY*3, VoxelClass.maxZ*3, false, Godot.Image.Format.Rgba8);
-		//for (int i = 0; i < 50; i++)
-		//    image.SetPixel(i, i, new Godot.Color(255, 0, 0, 255));
-		texture = ImageTexture.CreateFromImage(image);
+        //for (int i = 0; i < 50; i++)
+        //    image.SetPixel(i, i, new Godot.Color(1, 0, 0, 1));
+
+        //debug
+        //for (int y = 0; y < VoxelClass.maxZ * 3; y++)
+        //    for (int x = 0; x < VoxelClass.maxXY * 3; x++)
+        //        image.SetPixel(x, y, new Godot.Color(0, 1, 1, 1));
+        //debug
+
+        texture = ImageTexture.CreateFromImage(image);
 		Texture = texture;
 		TextureFilter = TextureFilterEnum.Nearest;
 
         Size = texture.GetSize() / 3;
 
-		float newScale = 1f / 3;
+        /*float newScale = (400f / Size.X);
+if(newScale>256)
+    newScale = 256;
+else if (newScale > 128)
+    newScale = 128;
+else if (newScale > 64)
+    newScale = 64;
+else if (newScale > 32)
+    newScale = 32;
+else if (newScale > 16)
+    newScale = 16;
+else if (newScale > 8)
+    newScale = 8;
+else if (newScale > 4)
+    newScale = 4;
+else if (newScale > 2)
+    newScale = 2;
+else newScale = 1;*/
+        int newScale = 8;
         Scale = new Vector2(newScale, newScale);
+
+        //float newScale = 1f / 3;
+        //Scale = new Vector2(newScale, newScale);
     }
 
 	public void DrawVoxel(float rotation)
@@ -98,7 +134,7 @@ public partial class MyTextureRectVox : TextureRect
 					image.SetPixel(x * 3 + 2, y * 3, imgCopy[y, x]);
 				}
             }
-				//image.SetPixel(x, y, new Godot.Color(255, 0, 0, 255));
+				//image.SetPixel(x, y, new Godot.Color(1, 0, 0, 1));
 		Texture = ImageTexture.CreateFromImage(image);
 	}
 
@@ -212,7 +248,7 @@ public partial class MyTextureRectVox : TextureRect
     private void _on_option_button_item_selected(long index)
 	{
 		DrawVoxel(-(index*22.5f));
-        TextureRect parentNode = (TextureRect)GetNode("../../MyTextureRect");
+        TextureRect parentNode = (TextureRect)GetNode("./MyTextureRect");
 		parentNode._on_option_button_item_selected2(index);
     }
 

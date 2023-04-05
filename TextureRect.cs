@@ -10,6 +10,10 @@ using static System.Net.Mime.MediaTypeNames;
 [Tool]
 public partial class TextureRect : Godot.TextureRect{
     private bool first_run = true;
+    private Vector2 chPos;
+    private Vector2 origPos;
+    private Vector2 origScale;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {      
@@ -36,7 +40,7 @@ public partial class TextureRect : Godot.TextureRect{
         ImageTexture texture = new ImageTexture();
         Godot.Image image = Godot.Image.Create(100, 100, false, Godot.Image.Format.Rgb8);
         // Nakreslení šikmé čáry
-        var color = new Godot.Color(255, 255, 255);
+        var color = new Godot.Color(1, 1, 1);
         for (int i = 0; i < 100; i++)
         {
             image.SetPixel(i, i, color);
@@ -45,6 +49,7 @@ public partial class TextureRect : Godot.TextureRect{
         // Použití textury jako zdroje pro zobrazení TextureRect
         Texture = texture;
     }*/
+    /*
     private void SetGrid()
     {
         int scale = 10;
@@ -59,18 +64,19 @@ public partial class TextureRect : Godot.TextureRect{
         childGridMode.Scale = currentScale;
         ImageTexture texture = new ImageTexture();
         Godot.Image image = Godot.Image.Create(1+(int)(rectSize.X* scale), 1+(int)(rectSize.Y* scale), false, Godot.Image.Format.Rgba8);
-        var color = new Godot.Color(255, 255, 255, 255);
+        //var color = new Godot.Color(1, 1, 1, 1);
         for (int y = 0; y < 1+rectSize.Y* scale; y++)
             for (int x = 0; x < 1+rectSize.X* scale; x += scale)
-                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 255));
+                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 1));
         for (int y = 0; y < 1+rectSize.Y* scale; y += scale)
             for (int x = 0; x < 1+rectSize.X* scale; x++)
-                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 255));
+                image.SetPixel(x, y, new Godot.Color(0, 0, 0, 1));
         texture = ImageTexture.CreateFromImage(image);
         childGridMode.Texture = texture;
         childGridMode.TextureFilter = TextureFilterEnum.Nearest;
         AddChild(childGridMode);
     }
+    */
 
     private void LoadImageAsTexture(string imagePath)
     {
@@ -97,11 +103,13 @@ public partial class TextureRect : Godot.TextureRect{
         else if (newScale > 2)
             newScale = 2;
         else newScale = 1;*/
-        int newScale = 8;
-        Scale = new Vector2(newScale, newScale);
+        //int newScale = 8;
+        //Scale = new Vector2(newScale, newScale);
 
         //Vector2 voxelSize = VoxelClass.GetSize();
         //Position = (Size - voxelSize) / 2;
+        int newScale = 3;
+        Scale = new Vector2(newScale, newScale);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -111,12 +119,13 @@ public partial class TextureRect : Godot.TextureRect{
     }
     internal void UpdatePos()
     {
+        
         Vector2 voxelSize = VoxelClass.GetSize();
-        Position = -(Size - voxelSize) / 2;
-        MyTextureRectVox myTextureRectVox = (MyTextureRectVox)GetNode("../../MyTextureRectVox");
-        //Window/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox
-        //Window/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox
-        myTextureRectVox.Position = new Vector2(-Position.X + 0.1f, -Position.Y + 0.1f);
+        Position = new Vector2(3 * (int)(-(Size.X - voxelSize.X) / 2 - 0.5f), 3 *(int)(- (Size.Y - voxelSize.Y) / 2 -0.5f));
+        origPos = Position;
+        origScale = Scale;
+        ////MyTextureRectVox myTextureRectVox = (MyTextureRectVox)GetNode("../../MyTextureRectVox");
+        ////myTextureRectVox.Position = new Vector2(-Position.X + 0.1f, -Position.Y + 0.1f);        
     }
 
     public void _on_option_button_item_selected2(long index)
@@ -124,5 +133,17 @@ public partial class TextureRect : Godot.TextureRect{
         string[] files = Directory.GetFiles(ProjectSettings.GlobalizePath("res://img/"), "*.png");
         LoadImageAsTexture(files[index]);
         UpdatePos();
+    }
+
+    internal void ChangeAddPosX(int value)
+    {
+        chPos = new Vector2(value, chPos.Y);
+        Position = origPos + chPos;
+    }
+
+    internal void ChangeAddPosY(int value)
+    {
+        chPos = new Vector2(chPos.X, value);
+        Position = origPos + chPos;
     }
 }

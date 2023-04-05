@@ -22,7 +22,8 @@ size = Vector2i(500, 500)
 offset_top = 480.0
 offset_right = 100.0
 offset_bottom = 496.0
-value = 50.0
+min_value = -10.0
+max_value = 10.0
 script = ExtResource("1_daak5")
 
 [node name="HSlider1TE" type="TextEdit" parent="Window/HSlider1/HSlider1"]
@@ -40,7 +41,10 @@ position = Vector2(200, 0)
 offset_top = 480.0
 offset_right = 100.0
 offset_bottom = 496.0
-value = 50.0
+min_value = 0.9
+max_value = 1.1
+step = 0.1
+value = 1.0
 script = ExtResource("1_daak5")
 
 [node name="HSlider1TE" type="TextEdit" parent="Window/HSlider2/HSlider1"]
@@ -57,7 +61,8 @@ script = ExtResource("2_llevw")
 offset_left = 480.0
 offset_right = 496.0
 offset_bottom = 100.0
-value = 50.0
+min_value = -10.0
+max_value = 10.0
 script = ExtResource("3_wsqbw")
 
 [node name="VSlider1TE" type="TextEdit" parent="Window/VSlider1/VSlider1"]
@@ -75,7 +80,10 @@ position = Vector2(0, 200)
 offset_left = 480.0
 offset_right = 496.0
 offset_bottom = 100.0
-value = 50.0
+min_value = 0.9
+max_value = 1.1
+step = 0.1
+value = 1.0
 script = ExtResource("3_wsqbw")
 
 [node name="VSlider1TE" type="TextEdit" parent="Window/VSlider2/VSlider1"]
@@ -101,16 +109,18 @@ offset_bottom = 480.0
 color = Color(0, 1, 0, 1)
 
 [node name="MyTextureRectVox" type="TextureRect" parent="Window/SubViewportContainer/SubViewport"]
+z_index = 10
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(10, 10)
 script = ExtResource("7_kfqv0")
 
 [node name="MyTextureRect" type="TextureRect" parent="Window/SubViewportContainer/SubViewport/MyTextureRectVox"]
+z_index = 9
 texture_filter = 1
+layout_mode = 0
 offset_right = 79.0
 offset_bottom = 65.0
-scale = Vector2(8, 8)
 texture = ExtResource("6_2nbc0")
 script = ExtResource("2_ulp3s")
 
@@ -170,7 +180,9 @@ size = Vector2i(500, 500)
 offset_top = 480.0
 offset_right = 100.0
 offset_bottom = 496.0
-value = 50.0
+min_value = -10.0
+max_value = 10.0
+value = 10.0
 script = ExtResource("1_daak5")
 
 [node name="HSlider1TE" type="TextEdit" parent="Window2/HSlider1/HSlider1"]
@@ -256,6 +268,7 @@ script = ExtResource("7_kfqv0")
 
 [node name="MyTextureRect" type="TextureRect" parent="Window2/SubViewportContainer/SubViewport/MyTextureRectVox"]
 texture_filter = 1
+layout_mode = 0
 offset_right = 79.0
 offset_bottom = 65.0
 scale = Vector2(8, 8)

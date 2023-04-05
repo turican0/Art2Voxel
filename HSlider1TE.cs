@@ -6,8 +6,7 @@ public partial class HSlider1TE : TextEdit
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Text = "50";
-
+		Text = "0";
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,6 +17,8 @@ public partial class HSlider1TE : TextEdit
 	private void _on_h_slider_1_value_changed(double value)
 	{
 		Text = value.ToString();
+        TextureRect node = (TextureRect)GetNode("../../../SubViewportContainer/SubViewport/MyTextureRectVox/MyTextureRect");
+        node.ChangeAddPosX((int)value);
 	}
 
 }
