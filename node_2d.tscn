@@ -100,20 +100,19 @@ offset_right = 480.0
 offset_bottom = 480.0
 color = Color(0, 1, 0, 1)
 
-[node name="MyTextureRect" type="TextureRect" parent="Window/SubViewportContainer/SubViewport"]
+[node name="MyTextureRectVox" type="TextureRect" parent="Window/SubViewportContainer/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(10, 10)
+script = ExtResource("7_kfqv0")
+
+[node name="MyTextureRect" type="TextureRect" parent="Window/SubViewportContainer/SubViewport/MyTextureRectVox"]
 texture_filter = 1
 offset_right = 79.0
 offset_bottom = 65.0
 scale = Vector2(8, 8)
 texture = ExtResource("6_2nbc0")
 script = ExtResource("2_ulp3s")
-
-[node name="MyTextureRectVox" type="TextureRect" parent="Window/SubViewportContainer/SubViewport/MyTextureRect"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(10, 10)
-script = ExtResource("7_kfqv0")
 
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="Window"]
 offset_left = 520.0
@@ -249,20 +248,19 @@ offset_right = 480.0
 offset_bottom = 480.0
 color = Color(0, 1, 0, 1)
 
-[node name="MyTextureRect" type="TextureRect" parent="Window2/SubViewportContainer/SubViewport"]
+[node name="MyTextureRectVox" type="TextureRect" parent="Window2/SubViewportContainer/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(10, 10)
+script = ExtResource("7_kfqv0")
+
+[node name="MyTextureRect" type="TextureRect" parent="Window2/SubViewportContainer/SubViewport/MyTextureRectVox"]
 texture_filter = 1
 offset_right = 79.0
 offset_bottom = 65.0
 scale = Vector2(8, 8)
 texture = ExtResource("6_2nbc0")
 script = ExtResource("2_ulp3s")
-
-[node name="MyTextureRectVox" type="TextureRect" parent="Window2/SubViewportContainer/SubViewport/MyTextureRect"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(10, 10)
-script = ExtResource("7_kfqv0")
 
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="Window2"]
 offset_left = 520.0
@@ -298,6 +296,18 @@ popup/item_6/id = 6
 popup/item_7/text = "157,5"
 popup/item_7/id = 7
 
+[node name="OptionButton2" type="OptionButton" parent="Window2"]
+offset_left = 400.0
+offset_top = 460.0
+offset_right = 491.0
+offset_bottom = 491.0
+item_count = 2
+selected = 0
+popup/item_0/text = "Shape"
+popup/item_0/id = 0
+popup/item_1/text = "Color"
+popup/item_1/id = 1
+
 [connection signal="value_changed" from="Window/HSlider1/HSlider1" to="Window/HSlider1/HSlider1/HSlider1TE" method="_on_h_slider_1_value_changed"]
 [connection signal="text_changed" from="Window/HSlider1/HSlider1/HSlider1TE" to="Window/HSlider1/HSlider1" method="_on_h_slider_1te_text_changed"]
 [connection signal="value_changed" from="Window/HSlider2/HSlider1" to="Window/HSlider2/HSlider1/HSlider1TE" method="_on_h_slider_1_value_changed"]
@@ -306,7 +316,7 @@ popup/item_7/id = 7
 [connection signal="text_changed" from="Window/VSlider1/VSlider1/VSlider1TE" to="Window/VSlider1/VSlider1" method="_on_v_slider_1te_text_changed"]
 [connection signal="value_changed" from="Window/VSlider2/VSlider1" to="Window/VSlider2/VSlider1/VSlider1TE" method="_on_v_slider_1_value_changed"]
 [connection signal="text_changed" from="Window/VSlider2/VSlider1/VSlider1TE" to="Window/VSlider2/VSlider1" method="_on_v_slider_1te_text_changed"]
-[connection signal="item_selected" from="Window/OptionButton" to="Window/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox" method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="Window/OptionButton" to="Window/SubViewportContainer/SubViewport/MyTextureRectVox" method="_on_option_button_item_selected"]
 [connection signal="value_changed" from="Window2/HSlider1/HSlider1" to="Window2/HSlider1/HSlider1/HSlider1TE" method="_on_h_slider_1_value_changed"]
 [connection signal="text_changed" from="Window2/HSlider1/HSlider1/HSlider1TE" to="Window2/HSlider1/HSlider1" method="_on_h_slider_1te_text_changed"]
 [connection signal="value_changed" from="Window2/HSlider2/HSlider1" to="Window2/HSlider2/HSlider1/HSlider1TE" method="_on_h_slider_1_value_changed"]
@@ -315,4 +325,4 @@ popup/item_7/id = 7
 [connection signal="text_changed" from="Window2/VSlider1/VSlider1/VSlider1TE" to="Window2/VSlider1/VSlider1" method="_on_v_slider_1te_text_changed"]
 [connection signal="value_changed" from="Window2/VSlider2/VSlider1" to="Window2/VSlider2/VSlider1/VSlider1TE" method="_on_v_slider_1_value_changed"]
 [connection signal="text_changed" from="Window2/VSlider2/VSlider1/VSlider1TE" to="Window2/VSlider2/VSlider1" method="_on_v_slider_1te_text_changed"]
-[connection signal="item_selected" from="Window2/OptionButton" to="Window2/SubViewportContainer/SubViewport/MyTextureRect/MyTextureRectVox" method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="Window2/OptionButton" to="Window2/SubViewportContainer/SubViewport/MyTextureRectVox" method="_on_option_button_item_selected"]

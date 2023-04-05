@@ -7,6 +7,10 @@ public partial class MyTextureRectVox : TextureRect
 	private bool first_run = true;
     private float lastRotation;
 
+    private Vector2 mousePosMiddle;
+    private Vector2 mousePosPosition;
+    private bool middlePressed = false;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
@@ -103,8 +107,109 @@ public partial class MyTextureRectVox : TextureRect
 	{
 		StartRun();
 	}
-	
-	private void _on_option_button_item_selected(long index)
+
+    public override void _Input(InputEvent inputEvent)
+    {
+        if (Name == "MyTextureRectVox")
+        {
+            if (inputEvent is InputEventMouseButton mouseButtonEvent)
+            {
+                if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Left)
+                {
+                    //GD.Print("Left mouse button pressed");
+                    VoxelClass.Pressed(0, Position, Scale, Size, GetViewport().GetMousePosition());
+                    //MyTextureRectVox voxNode = (MyTextureRectVox)GetNode("../../../../Window/SubViewportContainer/SubViewport/MyTextureRectVox");
+                    this.DrawVoxel();
+
+                    MyTextureRectVox voxNode2 = (MyTextureRectVox)GetNode("../../../../Window2/SubViewportContainer/SubViewport/MyTextureRectVox");
+                    voxNode2.DrawVoxel();
+                }
+                else if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Right)
+                {
+                    //GD.Print("Right mouse button pressed");
+                    VoxelClass.Pressed(1, Position, Scale, Size, GetViewport().GetMousePosition());
+                    //MyTextureRectVox voxNode = (MyTextureRectVox)GetNode("../../../../Window/SubViewportContainer/SubViewport/MyTextureRectVox");
+                    this.DrawVoxel();
+
+                    MyTextureRectVox voxNode2 = (MyTextureRectVox)GetNode("../../../../Window2/SubViewportContainer/SubViewport/MyTextureRectVox");
+                    voxNode2.DrawVoxel();
+                }
+                else if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.WheelUp)
+                {
+                    float scaleMultiplier = 1.25992104989f;
+                    Vector2 mousePosition = GetViewport().GetMousePosition();
+
+                    Vector2 imageStart = Position;
+                    Vector2 currentScale = Scale;
+                    //Vector2 currentSize = this.Size;
+
+                    Vector2 newScale = currentScale * scaleMultiplier;
+                    float dx = (mousePosition.X - imageStart.X) / currentScale.X;
+                    float dy = (mousePosition.Y - imageStart.Y) / currentScale.Y;
+                    float newX = mousePosition.X - dx * newScale.X;
+                    float newY = mousePosition.Y - dy * newScale.Y;
+
+                    Vector2 currentPosition = this.Position;
+                    currentPosition.X = newX;
+                    currentPosition.Y = newY;
+                    this.Position = currentPosition;
+                    this.Scale = newScale;
+                }
+                else if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.WheelDown)
+                {
+                    float scaleMultiplier = 1 / 1.25992104989f;
+                    Vector2 mousePosition = GetViewport().GetMousePosition();
+
+                    Vector2 imageStart = this.Position;
+                    Vector2 currentScale = this.Scale;
+                    //Vector2 currentSize = this.Size;
+
+                    Vector2 newScale = currentScale * scaleMultiplier;
+                    float dx = (mousePosition.X - imageStart.X) / currentScale.X;
+                    float dy = (mousePosition.Y - imageStart.Y) / currentScale.Y;
+                    float newX = mousePosition.X - dx * newScale.X;
+                    float newY = mousePosition.Y - dy * newScale.Y;
+
+                    Vector2 currentPosition = this.Position;
+                    currentPosition.X = newX;
+                    currentPosition.Y = newY;
+                    this.Position = currentPosition;
+                    this.Scale = newScale;
+                }
+                else if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Middle)
+                {
+                    //GD.Print("Middle mouse button pressed");
+                    mousePosMiddle = GetViewport().GetMousePosition();
+                    mousePosPosition = this.Position;
+                    middlePressed = true;
+                }
+                else if (!mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Middle)
+                {
+                    //GD.Print("Middle mouse button released");
+                    middlePressed = false;
+                }
+            }
+            else if (inputEvent is InputEventMouseMotion mouseMotionEvent)
+            {
+                if (mouseMotionEvent.Relative != Vector2.Zero)
+                {
+                    //GD.Print("Mouse moved");
+                    if (middlePressed)
+                    {
+                        Vector2 currentScale = this.Scale;
+                        Vector2 actMousePos = GetViewport().GetMousePosition();
+                        //Vector2 currentPosition = this.Position;
+                        Vector2 currentPosition;
+                        currentPosition.X = mousePosPosition.X + actMousePos.X - mousePosMiddle.X;
+                        currentPosition.Y = mousePosPosition.Y + actMousePos.Y - mousePosMiddle.Y;
+                        this.Position = currentPosition;
+                    }
+                }
+            }
+        }
+    }
+
+    private void _on_option_button_item_selected(long index)
 	{
 		DrawVoxel(-(index*22.5f));
         TextureRect parentNode = (TextureRect)GetNode("../../MyTextureRect");

@@ -14,9 +14,9 @@ public partial class node_2d : Node2D
         VoxelClass.CreateVoxelArray();
         VoxelClass.FillByImage(0,1);
         VoxelClass.inited=true;
-        TextureRect textNode = (TextureRect)GetNode("Window/SubViewportContainer/SubViewport/MyTextureRect");
+        TextureRect textNode = (TextureRect)GetNode("Window/SubViewportContainer/SubViewport/MyTextureRectVox/MyTextureRect");
         textNode.UpdatePos();
-        TextureRect textNode2 = (TextureRect)GetNode("Window2/SubViewportContainer/SubViewport/MyTextureRect");
+        TextureRect textNode2 = (TextureRect)GetNode("Window2/SubViewportContainer/SubViewport/MyTextureRectVox/MyTextureRect");
         textNode2.UpdatePos();
     }
 
