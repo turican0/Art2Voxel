@@ -43,7 +43,7 @@ offset_right = 100.0
 offset_bottom = 496.0
 min_value = 0.9
 max_value = 1.1
-step = 0.1
+step = 0.01
 value = 1.0
 script = ExtResource("1_daak5")
 
@@ -82,7 +82,7 @@ offset_right = 496.0
 offset_bottom = 100.0
 min_value = 0.9
 max_value = 1.1
-step = 0.1
+step = 0.01
 value = 1.0
 script = ExtResource("3_wsqbw")
 
@@ -121,6 +121,7 @@ texture_filter = 1
 layout_mode = 0
 offset_right = 79.0
 offset_bottom = 65.0
+scale = Vector2(8, 8)
 texture = ExtResource("6_2nbc0")
 script = ExtResource("2_ulp3s")
 

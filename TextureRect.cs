@@ -13,6 +13,7 @@ public partial class TextureRect : Godot.TextureRect{
     private Vector2 chPos;
     private Vector2 origPos;
     private Vector2 origScale;
+    private Vector2 chScale;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -124,6 +125,7 @@ public partial class TextureRect : Godot.TextureRect{
         Position = new Vector2(3 * (int)(-(Size.X - voxelSize.X) / 2 - 0.5f), 3 *(int)(- (Size.Y - voxelSize.Y) / 2 -0.5f));
         origPos = Position;
         origScale = Scale;
+        chScale = new Vector2(1, 1);
         ////MyTextureRectVox myTextureRectVox = (MyTextureRectVox)GetNode("../../MyTextureRectVox");
         ////myTextureRectVox.Position = new Vector2(-Position.X + 0.1f, -Position.Y + 0.1f);        
     }
@@ -145,5 +147,17 @@ public partial class TextureRect : Godot.TextureRect{
     {
         chPos = new Vector2(chPos.X, value);
         Position = origPos + chPos;
+    }
+
+    internal void ChangeScaleW(float value)
+    {
+        chScale = new Vector2(chScale.X, value);
+        Scale = origScale * chScale;
+    }
+
+    internal void ChangeScaleH(float value)
+    {
+        chScale = new Vector2(value, chScale.Y);
+        Scale = origScale * chScale;
     }
 }

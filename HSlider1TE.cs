@@ -18,8 +18,11 @@ public partial class HSlider1TE : TextEdit
 	{
 		Text = value.ToString();
         TextureRect node = (TextureRect)GetNode("../../../SubViewportContainer/SubViewport/MyTextureRectVox/MyTextureRect");
-        node.ChangeAddPosX((int)value);
-	}
+        if (GetNode("..").Name != "HSlider1")
+            node.ChangeAddPosX((int)value);
+		else
+            node.ChangeScaleW((float)value);
+    }
 
 }
 
