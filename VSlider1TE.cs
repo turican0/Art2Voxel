@@ -18,7 +18,7 @@ public partial class VSlider1TE : TextEdit
 	{
         Text = value.ToString();
         TextureRect node = (TextureRect)GetNode("../../../SubViewportContainer/SubViewport/MyTextureRectVox/MyTextureRect");
-        if (GetNode("..").Name != "VSlider1")
+        if (GetNode("../..").Name == "VSlider1")
             node.ChangeAddPosY((int)value);
         else
             node.ChangeScaleH((float)value);

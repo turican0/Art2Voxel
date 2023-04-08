@@ -140,24 +140,24 @@ public partial class TextureRect : Godot.TextureRect{
     internal void ChangeAddPosX(int value)
     {
         chPos = new Vector2(value, chPos.Y);
-        Position = origPos + chPos;
+        Position = origPos + chPos * 3;
     }
 
     internal void ChangeAddPosY(int value)
     {
         chPos = new Vector2(chPos.X, value);
-        Position = origPos + chPos;
+        Position = origPos + chPos * 3;
     }
 
     internal void ChangeScaleW(float value)
     {
-        chScale = new Vector2(chScale.X, value);
+        chScale = new Vector2(value, chScale.Y);
         Scale = origScale * chScale;
     }
 
     internal void ChangeScaleH(float value)
     {
-        chScale = new Vector2(value, chScale.Y);
+        chScale = new Vector2(chScale.X, value);
         Scale = origScale * chScale;
     }
 }

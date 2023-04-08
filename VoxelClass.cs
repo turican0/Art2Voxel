@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,26 +11,60 @@ using static Godot.HttpRequest;
 
 namespace Art2Voxel
 {
+    public struct ImgStr
+    {  
+        public Texture2D texture2D;
+        public String name;
+        public float rotation;
+        public Vector2 size;
+    }
     internal static class VoxelClass
     {
         public static int maxXY = 0;
         public static int maxZ = 0;
         public static bool inited = false;
         static Godot.Color[,,] voxArray;
-        static List<Texture2D> listTexture;
+        static List<ImgStr> listTexture;//+rotation
 
         public static void Init()
         {
-            listTexture = new List<Texture2D>();
+            listTexture = new List<ImgStr>();
         }
+
+        public static ImgStr CreateImgStr(string filePath)
+        {
+            ImgStr imgstr=new ImgStr();
+
+            Texture2D icon = ResourceLoader.Load(filePath) as Texture2D;
+            imgstr.texture2D=icon;
+
+            imgstr.size.X = icon.GetWidth();
+            imgstr.size.Y = icon.GetHeight();
+
+            imgstr.name= filePath;
+
+            char[] delimiterChars = { '.' };            
+
+            string[] words = filePath.Split(delimiterChars);
+
+            string str1 = words[words.Length - 2];
+
+            str1 = str1.Replace(",", ".");
+
+            //imgstr.rotation = (float)float.Parse(str1, System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+            //var d = Convert.ToDecimal("1.2345", new CultureInfo("en-US"));
+            imgstr.rotation = (float)Convert.ToDouble(str1, new NumberFormatInfo() { NumberDecimalSeparator = "." });
+            return imgstr;
+        }
+
         public static Vector2 GetPNGSize(string filePath)
         {
-            Image image = new Image();
-            Texture2D icon = ResourceLoader.Load(filePath) as Texture2D;
-            listTexture.Add(icon);
+            //Image image = new Image();
+            //Texture2D icon = ResourceLoader.Load(filePath) as Texture2D;
+            ImgStr imgStr = CreateImgStr(filePath);
+            listTexture.Add(imgStr);
             Vector2 result;
-            result.X = icon.GetWidth();
-            result.Y = icon.GetHeight();
+            result = imgStr.size;
             return result;
         }
         public static void AnalyzeImage(string file)
@@ -49,7 +84,7 @@ namespace Art2Voxel
         public static void FillByImage(int imgIndex, int size)
         {
             //Image image = new Image();
-            Texture2D icon = listTexture[imgIndex];
+            Texture2D icon = listTexture[imgIndex].texture2D;
             Image image = icon.GetImage();
             if (size > maxXY)
                 size = maxXY;
@@ -177,31 +212,39 @@ namespace Art2Voxel
             int x = (int)pressedPixel2.X;
             int z = (int)pressedPixel2.Y;
 
-            int lastVoxel = -1;
-            for (int y = 0; y != maxXY; y += 1)
+            if (pressed == 2)
             {
-                if (voxArray[z, y, x].A == 1)
-                {
-                    lastVoxel = y;
-                    break;
-                }
-            }
-            if (pressed == 0)
-            {
-                lastVoxel--;
-                if (lastVoxel >= 0)
-                    voxArray[z, lastVoxel, x] = voxArray[z, lastVoxel + 1, x];
+                FindBest(z,x);
             }
             else
             {
-                if (lastVoxel >= 0)
+
+                int lastVoxel = -1;
+                for (int y = 0; y != maxXY; y += 1)
                 {
-                    if (lastVoxel +1 < maxXY)
+                    if (voxArray[z, y, x].A == 1)
                     {
-                        if (voxArray[z, lastVoxel + 1, x].A == 0)
-                            voxArray[z, lastVoxel + 1, x] = voxArray[z, lastVoxel, x];
+                        lastVoxel = y;
+                        break;
                     }
-                    voxArray[z, lastVoxel, x] = new Godot.Color(0, 0, 0, 0);
+                }
+                if (pressed == 0)
+                {
+                    lastVoxel--;
+                    if (lastVoxel >= 0)
+                        voxArray[z, lastVoxel, x] = voxArray[z, lastVoxel + 1, x];
+                }
+                else
+                {
+                    if (lastVoxel >= 0)
+                    {
+                        if (lastVoxel + 1 < maxXY)
+                        {
+                            if (voxArray[z, lastVoxel + 1, x].A == 0)
+                                voxArray[z, lastVoxel + 1, x] = voxArray[z, lastVoxel, x];
+                        }
+                        voxArray[z, lastVoxel, x] = new Godot.Color(0, 0, 0, 0);
+                    }
                 }
             }
             /*
@@ -211,6 +254,77 @@ namespace Art2Voxel
                 {
                     voxArray[z, y, x] = new Color(1,0,1,1);
                 }*/
+        }
+
+        internal static int GetDiffImg(double rotation, Texture2D texture2D)
+        {
+            //Godot.Color[,] imgCopy = new Godot.Color[maxZ, maxXY];
+            while (rotation < 0)
+                rotation += 360;
+            while (rotation > 360)
+                rotation -= 360;
+            double angle = Math.PI * rotation / 180.0;
+            double s = Math.Sin(angle);
+            double c = Math.Cos(angle);
+
+            int maxXYZ = maxXY * maxZ;
+            int zoom = 1;
+
+            int minX = 0;
+            int maxX = maxXY;
+            int addX = 1;
+
+            int minY = 0;
+            int maxY = maxXY;
+            int addY = 1;
+            if (rotation < 180)
+            {
+                minX = maxXY - 1;
+                maxX = -1;
+                addX = -1;
+            }
+            if ((rotation > 90) && (rotation < 270))
+            {
+                minY = maxXY - 1;
+                maxY = -1;
+                addY = -1;
+            }
+
+            double tempAddCenter = ((maxXY - 1) * 0.5 * zoom);
+
+            Image image = texture2D.GetImage();
+
+            int result = 0;
+
+            for (int x = minX; x != maxX; x += addX)
+                for (int y = minY; y != maxY; y += addY)
+                {
+                    int newX = (int)(((x - tempAddCenter) * c - (y - tempAddCenter) * s) + tempAddCenter + 0.0001);
+                    int newY = (int)(((x - tempAddCenter) * s + (y - tempAddCenter) * c) + tempAddCenter + 0.0001);
+                    if ((newX < 0) || (newY < 0))
+                        continue;
+                    if ((newX > maxXY - 1) || (newY > maxXY - 1))
+                        continue;
+                    //int tempIndex = newX * maxXYZ + newY * maxZ;
+                    for (int z = 0; z < maxZ; z++)
+                    {
+                        if (voxArray[z, newY, newX].A == 1)
+                        {
+                            if(voxArray[z, newY, newX] != image.GetPixel(x,z))
+                                result++;                            
+                        }
+                    }
+                }
+            return result;//fix it
+        }
+
+        private static void FindBest(int z, int x)
+        {
+            int sumaDiff = 0;
+            foreach (ImgStr imgStr in listTexture)
+            {
+                sumaDiff += GetDiffImg(imgStr.rotation, imgStr.texture2D);
+            }
         }
         /*
 .(0st)

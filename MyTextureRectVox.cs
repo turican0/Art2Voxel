@@ -148,6 +148,15 @@ else newScale = 1;*/
     {
         if (Name == "MyTextureRectVox")
         {
+            if (inputEvent is InputEventKey eventKey && eventKey.Pressed && inputEvent.IsActionPressed("autoLine"))
+            {
+                VoxelClass.Pressed(2, Position, Scale, Size, GetViewport().GetMousePosition());
+                
+                this.DrawVoxel();
+                MyTextureRectVox voxNode2 = (MyTextureRectVox)GetNode("../../../../Window2/SubViewportContainer/SubViewport/MyTextureRectVox");
+                voxNode2.DrawVoxel();
+            }
+
             if (inputEvent is InputEventMouseButton mouseButtonEvent)
             {
                 if (mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Left)
