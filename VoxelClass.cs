@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -140,7 +141,7 @@ namespace Art2Voxel
             }
         }
 
-        internal static Color[,] GetImage(double rotation)
+        internal static Godot.Color[,] GetImage(double rotation)
         {
             Godot.Color[,] imgCopy = new Godot.Color[maxZ, maxXY];
             while (rotation < 0)
@@ -256,9 +257,9 @@ namespace Art2Voxel
                 }*/
         }
 
-        internal static int GetDiffImg(double rotation, Texture2D texture2D)
+        internal static int GetDiffAlphaImg(double rotation, Texture2D texture2D)
         {
-            //Godot.Color[,] imgCopy = new Godot.Color[maxZ, maxXY];
+            Godot.Color[,] imgCopy = new Godot.Color[maxZ, maxXY];
             while (rotation < 0)
                 rotation += 360;
             while (rotation > 360)
@@ -292,10 +293,6 @@ namespace Art2Voxel
 
             double tempAddCenter = ((maxXY - 1) * 0.5 * zoom);
 
-            Image image = texture2D.GetImage();
-
-            int result = 0;
-
             for (int x = minX; x != maxX; x += addX)
                 for (int y = minY; y != maxY; y += addY)
                 {
@@ -310,11 +307,46 @@ namespace Art2Voxel
                     {
                         if (voxArray[z, newY, newX].A == 1)
                         {
-                            if(voxArray[z, newY, newX] != image.GetPixel(x,z))
-                                result++;                            
+                            imgCopy[z, x] = voxArray[z, newY, newX];
                         }
                     }
                 }
+            //return imgCopy;
+
+            Image image = texture2D.GetImage();
+
+            //if (size > maxXY)
+            //int size = maxXY;
+
+            int imgWidth = image.GetWidth();
+            int imgHeight = image.GetHeight();
+
+            int addXY = (maxXY - imgWidth) / 2;
+            int addZ = (maxZ - imgHeight) / 2;
+
+            //int addSXY = (maxXY - size) / 2;
+
+            int Xmin = addXY;
+            if (Xmin < 0) Xmin = 0;
+            int Xmax = imgWidth + addXY;
+            if (Xmax > maxXY) Xmax = maxXY;
+
+            int Zmin = addZ;
+            if (Zmin < 0) Zmin = 0;
+            int Zmax = imgHeight + addZ;
+            if (Zmax > maxXY) Zmax = maxZ;
+
+            int result = 0;
+            for (int x = Xmin; x < Xmax; x++)
+                //for (int y = Ymin; y < Ymax; y++)
+                    for (int z = Zmin; z < Zmax; z++)
+                    {
+                        if (imgCopy[z, x].A != image.GetPixel(x - Xmin, z - Zmin).A)
+                        {
+                            result++;
+                        }
+                    }
+
             return result;//fix it
         }
 
@@ -323,7 +355,7 @@ namespace Art2Voxel
             int sumaDiff = 0;
             foreach (ImgStr imgStr in listTexture)
             {
-                sumaDiff += GetDiffImg(imgStr.rotation, imgStr.texture2D);
+                sumaDiff += GetDiffAlphaImg(imgStr.rotation, imgStr.texture2D);
             }
         }
         /*
