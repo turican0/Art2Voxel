@@ -35,6 +35,7 @@ public partial class MyTextureRectVox : TextureRect
     {
         int scale = 10;
         TextureRect childGridMode = new TextureRect();
+        childGridMode.ZIndex = 20;
         childGridMode.Name = "MyGridTextureRect";
         Vector2 rectSize = Texture.GetSize();
         Vector2 currentScale = Scale;
@@ -56,6 +57,9 @@ public partial class MyTextureRectVox : TextureRect
         for (int y = 0; y < 1 + rectSize.Y/3 * scale; y++)
             for (int x = 0; x < 1 + rectSize.X/3 * scale; x += scale)
                 image.SetPixel(x, y, new Godot.Color(0, 0, 0, 1));
+        for (int y = 0; y < 1 + rectSize.Y / 3 * scale; y += scale)
+            for (int x = 0; x < 1 + rectSize.X / 3 * scale; x++)
+                image.SetPixel(x, y + scale / 3, new Godot.Color(0, 0, 0, 1));
         for (int y = 0; y < 1 + rectSize.Y/3 * scale; y += scale)
             for (int x = 0; x < 1 + rectSize.X/3 * scale; x++)
                 image.SetPixel(x, y, new Godot.Color(0, 0, 0, 1));

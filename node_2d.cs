@@ -6,11 +6,27 @@ using System.IO;
 
 public partial class node_2d : Node2D
 {
-	// Called when the node enters the scene tree for the first time.
+
+    private void AddRotTo(string optionPath, ImgStr imgStr)
+    {
+        OptionButton nodeButt = (OptionButton)this.GetNode(optionPath);
+        nodeButt.AddItem(imgStr.rotation.ToString());
+    }
+    private void AddRotationOptions()
+    {
+        foreach (ImgStr imgStr in VoxelClass.listTexture)
+        {
+            AddRotTo("./Window/OptionButton", imgStr);
+            AddRotTo("./Window2/OptionButton", imgStr);
+        }
+    }
+
+    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
         VoxelClass.Init();
         VoxelClass.AnalyzeFolder("res://img/");
+        AddRotationOptions();
         VoxelClass.CreateVoxelArray();
         VoxelClass.FillByImage(0,1);
         VoxelClass.inited=true;

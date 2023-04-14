@@ -25,7 +25,7 @@ namespace Art2Voxel
         public static int maxZ = 0;
         public static bool inited = false;
         static Godot.Color[,,] voxArray;
-        static List<ImgStr> listTexture;//+rotation
+        public static List<ImgStr> listTexture;//+rotation
 
         public static void Init()
         {
@@ -68,6 +68,7 @@ namespace Art2Voxel
             result = imgStr.size;
             return result;
         }
+
         public static void AnalyzeImage(string file)
         {
             Vector2 pngSize = GetPNGSize(file);
@@ -137,7 +138,7 @@ namespace Art2Voxel
             string[] files = Directory.GetFiles(ProjectSettings.GlobalizePath(directoryPath), "*.png");
             foreach (string file in files)
             {
-                VoxelClass.AnalyzeImage(file);
+                AnalyzeImage(file);
             }
         }
 
@@ -215,7 +216,7 @@ namespace Art2Voxel
 
             if (pressed == 2)
             {
-                FindBest(z,x);
+                FindBestAlpha(z,x);
             }
             else
             {
@@ -341,6 +342,7 @@ namespace Art2Voxel
                 //for (int y = Ymin; y < Ymax; y++)
                     for (int z = Zmin; z < Zmax; z++)
                     {
+                    var temp = image.GetPixel(x - Xmin, z - Zmin);
                         if (imgCopy[z, x].A != image.GetPixel(x - Xmin, z - Zmin).A)
                         {
                             result++;
@@ -350,12 +352,27 @@ namespace Art2Voxel
             return result;//fix it
         }
 
-        private static void FindBest(int z, int x)
+        internal static int GetDiffAlphaAll()
         {
             int sumaDiff = 0;
             foreach (ImgStr imgStr in listTexture)
             {
                 sumaDiff += GetDiffAlphaImg(imgStr.rotation, imgStr.texture2D);
+            }
+            return sumaDiff;
+        }
+
+        private static void FindBestAlpha(int z, int x)
+        {
+            for (int y = 0; y < maxXY; y++)
+                voxArray[z, y, x] = new Godot.Color(voxArray[z, y, x].R, voxArray[z, y, x].G, voxArray[z, y, x].B,1);
+            int lastScore = GetDiffAlphaAll();
+            for (int y = 0; y < maxXY; y++)
+            {
+                voxArray[z, y, x] = new Godot.Color(voxArray[z, y, x].R, voxArray[z, y, x].G, voxArray[z, y, x].B, 0);
+                int testScore = GetDiffAlphaAll();
+                if(testScore>=lastScore)
+                    voxArray[z, y, x] = new Godot.Color(voxArray[z, y, x].R, voxArray[z, y, x].G, voxArray[z, y, x].B, 1);
             }
         }
         /*
